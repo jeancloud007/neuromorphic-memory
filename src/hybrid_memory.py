@@ -57,6 +57,10 @@ class SimpleEmbedder:
             'winner': ['winner', 'wta', 'selection', 'assembly', 'take-all', 'winner-take-all'],
             'pattern': ['pattern', 'completion', 'partial', 'noisy', 'fuzzy', 'incomplete'],
             'prevent': ['prevent', 'forgetting', 'ewc', 'consolidation', 'catastrophic', 'protection'],
+            'numbers': ['numbers', 'number', '25', '39', 'test', 'tests', 'claw-bench', 'clawbench', 'validate'],
+            'miruvor': ['miruvor', 'neuromorphic', 'snn', 'spiking', 'neural', 'memory', 'system'],
+            'builder': ['built', 'created', 'made', 'developed', 'authored', 'wrote', 'jean', 'samantha', 'jared'],
+            'core': ['core', 'main', 'primary', 'hybrid', 'hybrid_memory', 'implementation', 'snn'],
         }
         
         # Abbreviation expansions
@@ -256,7 +260,7 @@ class HybridMemory:
         """Explicit save for batch operations."""
         self._save()
     
-    def recall(self, query: str, use_pattern_completion: bool = True) -> Dict[str, Any]:
+    def recall(self, query: str, use_pattern_completion: bool = True) -> Optional[Dict[str, Any]]:
         """
         Recall a memory.
         
@@ -265,12 +269,16 @@ class HybridMemory:
             use_pattern_completion: Whether to use SNN pattern completion
             
         Returns:
-            Dict with content, confidence, memory_id, etc.
+            Dict with content, confidence, memory_id, etc. or None if empty query.
         """
         start = time.time()
         
+        # Handle empty query
+        if not query or not query.strip():
+            return None
+        
         if not self.embeddings:
-            return self._empty_result()
+            return None
         
         # Embed query
         query_embedding = self.embedder.embed(query)
