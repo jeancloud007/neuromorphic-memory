@@ -1,0 +1,14 @@
+# Core dependencies
+numpy>=1.24.0
+scipy>=1.10.0
+
+# SNN frameworks (pick one to start)
+# norse  # PyTorch-based SNN
+# snntorch  # Alternative PyTorch SNN
+# brian2  # Flexible SNN simulator
+
+# Visualization
+matplotlib>=3.7.0
+
+# Testing
+pytest>=7.0.0
