@@ -26,9 +26,11 @@ import numpy as np
 class HybridConfig:
     """Configuration for hybrid memory system."""
     embedding_dim: int = 256
-    max_memories: int = 1000
+    max_memories: int = 10000
     snn_weight: float = 0.3  # Weight for SNN score in hybrid
     persistence_path: str = "~/.clawdbot/hybrid-memory.json"
+    auto_save: bool = True  # Auto-save after each store
+    save_interval: int = 100  # Save every N stores (if auto_save=False)
 
 
 class SimpleEmbedder:
@@ -242,8 +244,17 @@ class HybridMemory:
         self.stats['stores'] += 1
         self.stats['total_store_ms'] += elapsed
         
-        self._save()
+        # Save (conditional for performance)
+        if self.config.auto_save:
+            self._save()
+        elif self.stats['stores'] % self.config.save_interval == 0:
+            self._save()
+        
         return memory_id
+    
+    def save(self):
+        """Explicit save for batch operations."""
+        self._save()
     
     def recall(self, query: str, use_pattern_completion: bool = True) -> Dict[str, Any]:
         """
