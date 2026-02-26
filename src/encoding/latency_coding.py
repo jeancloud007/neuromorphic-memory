@@ -236,7 +236,7 @@ if __name__ == "__main__":
     spike_mask, spike_times = encoder.encode(features)
     print(f"Features: {features}")
     print(f"Spike mask: {spike_mask[:10]}")  # First 10 (positive channel)
-    print(f"Spike times: {spike_times[:10]:.1f}")
+    print(f"Spike times: {np.round(spike_times[:10], 1)}")
     
     print("\nSpike train visualization:")
     train = encoder.to_spike_train(features)
